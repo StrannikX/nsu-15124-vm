@@ -18,6 +18,17 @@ void print_matrix(vector<vector<double> > matrix, vector<double> vec) {
     }
 }
 
+// Печать матрицы и вектора
+void print_matrix(vector<vector<double> > matrix) {
+    cout << endl;
+    for (int i = 0; i < matrix.size(); i++) {
+        for (int j = 0; j < matrix.size(); j++) {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
 int main()
 {
     // Размерность матрицы
@@ -31,14 +42,19 @@ int main()
     vector<double> vec(n);
     // Определитель
     double det = 1.;
+    // Единичная матрица - будет обратной
+    vector<vector<double> > inv(n);
 
     // Считываем матрицу A
     for (int i = 0; i < n; i++) {
         matrix[i] = *(new vector<double>(n));
+        inv[i] = *(new vector<double>(n));
         // Считываем строку
         for (int j = 0; j < n; j++) {
             cin >> matrix[i][j];
+            inv[i][j] = 0.;
         }
+        inv[i][i] = 1.;
     }
 
     cout << endl;
@@ -63,13 +79,12 @@ int main()
             // Поэлементно прибавляем к i-ой строке j-ую
             for (int l = 0; l < n; l++) {
                 matrix[i][l] += matrix[j][l];
+                inv[i][l] += inv[j][l];
             }
             // Не забываем про вектор b
             vec[i] += vec[j];
             // Фиксируем новый диагональный элемент
             el = matrix[i][i];
-
-            print_matrix(matrix, vec);
         }
 
         // По всем строкам ниже i-ой
@@ -79,6 +94,7 @@ int main()
             double k = - matrix[j][i] / el;
             for (int l = 0; l < n; l++) {
                 matrix[j][l] += matrix[i][l] * k;
+                inv[j][l] += inv[i][l] * k;
             }
             vec[j] += vec[i] * k;
         }
@@ -86,12 +102,11 @@ int main()
         // Делим i-ую строку на диагональный
         for (int j = 0; j < n; j++) {
             matrix[i][j] /= el;
+            inv[i][j] /= el;
         }
         vec[i] /= el;
 
         det *= el;
-
-        print_matrix(matrix, vec);
     }
 
     print_matrix(matrix, vec);
@@ -103,16 +118,28 @@ int main()
         }
     }
 
+    // Доводим процесс поиска обратной до конца
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i - 1; j >= 0; j--) {
+            for (int l = 0; l < n; l++) {
+                inv[j][l] -= inv[i][l] * matrix[j][i];
+            }
+        }
+    }
+
     cout << endl;
 
     for (int i = 0; i < n; i++) {
         cout << "x" << (i + 1) << " = " << vec[i] << endl;
     }
 
-    cout << "Det = " << det;
+    cout << endl << "Det = " << det << endl << endl << "Inversed matrix" << endl;
+
+    print_matrix(inv);
 
     for (int i = 0; i < n; i++) {
         delete &(matrix[i]);
+        delete &(inv[i]);
     }
 
     return 0;
