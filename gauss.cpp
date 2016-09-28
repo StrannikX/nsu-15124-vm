@@ -4,6 +4,8 @@
 # include <cstdlib>
 # include <vector>
 
+# define _CRT_SECURE_NO_WARNINGS
+
 using namespace std;
 
 // Печать матрицы и вектора
@@ -140,6 +142,8 @@ int main()
     cout << endl << endl << "Inversed matrix" << endl;
 
     print_matrix(inv);
+
+    system("pause");
 
     return 0;
 }
