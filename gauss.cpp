@@ -1,4 +1,5 @@
 # include <iostream>
+# include <cstdio>
 # include <cmath>
 # include <cstdlib>
 # include <vector>
@@ -10,10 +11,10 @@ void print_matrix(vector<vector<double> > matrix, vector<double> vec) {
     cout << endl;
     for (int i = 0; i < matrix.size(); i++) {
         for (int j = 0; j < matrix.size(); j++) {
-            cout << matrix[i][j] << " ";
+            printf("%.8lf ", matrix[i][j]);
         }
         cout << " | ";
-        cout << vec[i];
+        printf("%.8lf ", vec[i]);
         cout << endl;
     }
 }
@@ -23,7 +24,7 @@ void print_matrix(vector<vector<double> > matrix) {
     cout << endl;
     for (int i = 0; i < matrix.size(); i++) {
         for (int j = 0; j < matrix.size(); j++) {
-            cout << matrix[i][j] << " ";
+            printf("%.8lf ", matrix[i][j]);
         }
         cout << endl;
     }
@@ -130,17 +131,15 @@ int main()
     cout << endl;
 
     for (int i = 0; i < n; i++) {
-        cout << "x" << (i + 1) << " = " << vec[i] << endl;
+        cout << "x" << (i + 1) << " = ";
+        printf("%.8lf\n", vec[i]);
     }
 
-    cout << endl << "Det = " << det << endl << endl << "Inversed matrix" << endl;
+    cout << endl << "Det = ";
+    printf("%.8lf", det);
+    cout << endl << endl << "Inversed matrix" << endl;
 
     print_matrix(inv);
-
-    for (int i = 0; i < n; i++) {
-        delete &(matrix[i]);
-        delete &(inv[i]);
-    }
 
     return 0;
 }

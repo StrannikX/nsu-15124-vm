@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1474432056 source:h:\nsu-15124-vm\main.cpp
-	<iostream>
-	<cmath>
-	<cstdlib>
-	<vector>
-
