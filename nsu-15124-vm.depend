@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1476217276 source:/home/strannik/projects/nsu-15124-vm/matrix.cpp
+	"matrix.hpp"
+
+1476218147 /home/strannik/projects/nsu-15124-vm/matrix.hpp
+	<vector>
+	<iostream>
+
+1476217215 source:/home/strannik/projects/nsu-15124-vm/reflect.cpp
+	<iostream>
+	"matrix.hpp"
+
+1476214313 source:/home/strannik/projects/nsu-15124-vm/gauss.cpp
+	<iostream>
+	<cstdio>
+	<cmath>
+	<cstdlib>
+	<vector>
+
+1476214301 source:/home/strannik/projects/nsu-15124-vm/progon.cpp
+	<cstdio>
+	<iostream>
+	<cmath>
+	<vector>
+
