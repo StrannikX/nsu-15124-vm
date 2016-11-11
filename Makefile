@@ -1,4 +1,7 @@
-all: gauss progon reflect rotate
+all: gauss progon reflect rotate richardson grad
+
+run: all
+	./richardson
 
 gauss: gauss.o
 	g++ -lstdc++ gauss.o -o gauss
@@ -21,3 +24,13 @@ rotate: rotate.o matrix.o
 	g++ -lstdc++ rotate.o matrix.o -o rotate
 
 rotate.o: rotate.cpp matrix.hpp
+
+richardson: richardson.o matrix.o
+	g++ -lstdc++ richardson.o matrix.o -o richardson
+
+richardson: richardson.cpp matrix.hpp
+
+grad: grad.o matrix.o
+	g++ -lstdc++ grad.o matrix.o -o grad
+
+grad: grad.cpp matrix.hpp

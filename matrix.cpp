@@ -182,6 +182,23 @@ Matrix Matrix::E(int n) {
     return result;
 }
 
+Vector Matrix::toVector() {
+    if (n != 1 && m != 1)
+        throw std::invalid_argument("Matrix can't be convert to vector!");
+    if (n == 1) {
+        Vector v(m);
+        for (int  i = 0; i < m; ++i) {
+            v[i] = matrix[0][i];
+        }
+        return v;
+    }
+    Vector v(n);
+    for (int  i = 0; i < n; ++i) {
+        v[i] = matrix[i][0];
+    }
+    return v;
+}
+
 std::ostream& operator<<(std::ostream& out, Matrix const& m) {
     for (int i = 0; i < m.n; i++) {
         for (int j = 0; j < m.m; j++) {
@@ -252,12 +269,12 @@ Vector::operator Matrix() {
 }
 
 double Vector::operator[] (int i) const {
-    if (i < 0 || i >= n) throw std::out_of_range("Illegal index");
+    if (i < 0 || i > n) throw std::out_of_range("Illegal index");
     return el[i];
 }
 
 double& Vector::operator[] (int i) {
-    if (i < 0 || i >= n) throw std::out_of_range("Illegal index");
+    if (i < 0 || i > n) throw std::out_of_range("Illegal index");
     return el[i];
 }
 

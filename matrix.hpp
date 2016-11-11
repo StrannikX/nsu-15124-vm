@@ -4,6 +4,8 @@
 # include <vector>
 # include <iostream>
 
+class Vector;
+
 class Matrix {
 
     std::vector<std::vector<double> > matrix;
@@ -19,6 +21,7 @@ public:
     Matrix& operator=(Matrix const&);
     std::vector<double>& operator[](int i);
     Matrix operator~(void);
+    Vector toVector();
 
     int rows_count();
     int colls_count();
