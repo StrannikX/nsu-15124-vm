@@ -3,6 +3,7 @@
 
 # include <vector>
 # include <iostream>
+# include <utility>
 
 class Vector;
 
@@ -26,6 +27,9 @@ public:
     int rows_count();
     int colls_count();
 
+    Matrix inverse();
+    std::pair<Matrix, Matrix> qr();
+
     friend Matrix operator+(Matrix const&, Matrix const&);
     friend Matrix operator-(Matrix const&, Matrix const&);
     friend Matrix operator*(Matrix const&, Matrix const&);
@@ -38,6 +42,8 @@ public:
     friend std::istream& operator>>(std::istream&, Matrix&);
 
     static Matrix E(int n);
+
+    Vector solve(Vector);
 };
 
 class Vector {
@@ -75,6 +81,8 @@ class Vector {
 
     friend std::ostream& operator<<(std::ostream&, Vector const&);
     friend std::istream& operator>>(std::istream&, Vector&);
+
+    static Vector e(int, int);
 };
 
 Matrix operator+(Matrix const&, Matrix const&);

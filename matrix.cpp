@@ -362,3 +362,108 @@ std::istream& operator>>(std::istream& in, Vector &v) {
 
     return in;
 }
+
+Matrix Matrix::inverse() {
+    Matrix inv = Matrix::E(n);
+    Matrix matrix = *this;
+
+    for (int i = 0; i < n; i++) {
+        // Фиксируем диагональный элемент
+        double el = matrix[i][i];
+
+        if (el == 0.) {
+            int j = 0;
+            // Ищем такую строку из последующих
+            // i-ый элемент которой не нулевой
+            for (j = i + 1; matrix[j][i] == 0 && j < n; j++);
+
+            // Поэлементно прибавляем к i-ой строке j-ую
+            for (int l = 0; l < n; l++) {
+                matrix[i][l] += matrix[j][l];
+                inv[i][l] += inv[j][l];
+            }
+            // Фиксируем новый диагональный элемент
+            el = matrix[i][i];
+        }
+
+        // По всем строкам ниже i-ой
+        for (int j = i + 1; j < n; j++) {
+            // Коэффициент, при умножении на который i-ой строки
+            //  И прибавлении её к j-ой мы занулим i-ый элемент j-ой строки
+            double k = - matrix[j][i] / el;
+            for (int l = 0; l < n; l++) {
+                matrix[j][l] += matrix[i][l] * k;
+                inv[j][l] += inv[i][l] * k;
+            }
+        }
+
+        // Делим i-ую строку на диагональный
+        for (int j = 0; j < n; j++) {
+            matrix[i][j] /= el;
+            inv[i][j] /= el;
+        }
+
+        // Доводим процесс поиска обратной до конца
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i - 1; j >= 0; j--) {
+                for (int l = 0; l < n; l++) {
+                    inv[j][l] -= inv[i][l] * matrix[j][i];
+                }
+            }
+        }
+
+        return inv;
+    }
+}
+
+Vector Vector::e(int n, int i) {
+    Vector e(n);
+    e[i] = 1;
+    return e;
+}
+
+inline double sgn(double x) {return x > 0 ? 1 : -1;}
+
+std::pair<Matrix, Matrix> Matrix::qr() {
+    Matrix R = *this, Q = Matrix::E(n);
+
+    for (int i = 0; i < n-1; i++) {
+        // Получаем i-ый вектор-столбец
+        Vector t = (~R)[i];
+        // Зануляем, все элементы над i-ым
+        for (int j = 0; j < i; j++) {
+            t[j] = 0;
+        }
+        // Находим вектор w необходимый для преобразования Хаусхолдера
+        Vector w = (t - sgn(-t[i]) * t.length() * Vector::e(n, i)).normalized();
+        // Находим матрицу преобразования
+        Matrix H = Matrix::E(n) - 2 * ~w * w;
+        // Применяем преобразование Хаусхолдера к A
+        // Мы на шаг ближе к R из A = QR
+        R = H * R;
+        // Применяем к Q
+        Q = H * Q;
+    }
+
+    return std::make_pair(~Q, R);
+}
+
+Vector Matrix::solve(Vector b) {
+    Vector solution(n);
+    std::pair<Matrix, Matrix > QR  = qr();
+    Matrix Q = QR.first;
+    Matrix R = QR.second;
+    // Применяем преобразование Q к вектору B
+    Matrix d = ~Q * ~b;
+    // Обратный ход Гаусса
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i + 1; j < n; j++) {
+            d[i][0] -= R[i][j] * d[j][0];
+        }
+        d[i][0] /= R[i][i];
+    }
+    for (int i = 0; i < n; i++) {
+        solution[i] = d[i][0];
+    }
+    return solution;
+}
